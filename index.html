@@ -82,6 +82,8 @@ em{font-style:italic;color:var(--terra)}
 .price.pend{font-weight:500;font-size:13px;color:var(--terra)}
 .add{border:0;background:var(--ala);color:#fff;border-radius:999px;padding:9px 14px;font-weight:600;font-size:13px;cursor:pointer;white-space:nowrap}
 .add.in{background:var(--salvia-l);color:var(--raiz)}
+.sec-h{grid-column:1/-1;margin:14px 0 -4px;display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px}.sec-h h2{font-size:clamp(22px,3vw,30px)}.sec-h p{margin:0;color:var(--muted);font-size:14px}
+.ph .emo{position:absolute;inset:0;display:grid;place-items:center}.ph .emo span{width:46%;aspect-ratio:1;border-radius:50%;background:var(--durazno,#F6D9BF);display:grid;place-items:center;font-size:clamp(40px,7vw,64px)}
 .empty{grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)}
 
 /* bloques informativos */
@@ -162,9 +164,9 @@ label.f input,label.f textarea{border:1.5px solid var(--line);background:var(--c
   <div class="wrap">
     <a class="brand" href="#inicio"><img src="logo.png" alt="Logo Raíces y Alas"><b>Raíces <i>y</i> Alas</b></a>
     <div class="spacer"></div>
-    <button class="cartbtn" id="openCart" type="button" aria-label="Ver mi pre-reserva">
+    <button class="cartbtn" id="openCart" type="button" aria-label="Ver mi pedido">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 7h12l-1 13H7L6 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
-      <span class="lbl">Mi pre-reserva</span><span class="n" id="count">0</span>
+      <span class="lbl">Mi pedido</span><span class="n" id="count">0</span>
     </button>
   </div>
 </header>
@@ -229,13 +231,13 @@ label.f input,label.f textarea{border:1.5px solid var(--line);background:var(--c
 <script>
 /* ============ CONFIGURACIÓN (edita aquí) ============ */
 /* Los datos viven en config.json y productos.json. Para cambiar precios o productos, edita esos archivos. */
-let CONFIG = {whatsapp:"",instagram:"raicesyalas.ni",tipoCambio:36.6243,anticipo:0.5};
+let CONFIG = {whatsapp:"",instagram:"raicesyalas.ni",tipoCambio:36.6243,anticipo:0.5,hojaCSV:""};
 let PRODUCTOS = [];
 const FOTOS = {};
 /* ==================================================== */
 
-const ETAPAS=[["todos","Todos"],["0-1","0 a 1 año"],["1-3","1 a 3 años"],["3-6","3 a 6 años"],["mueble","Muebles"],["regalo","Para regalar en Navidad"]];
-const enEtapa=(p,k)=>k==="todos"||(p.etiquetas||[]).includes(k)||(p.edadMax<20&&(k==="0-1"?p.edadMin<1:k==="1-3"?(p.edadMin<3&&p.edadMax>=1):k==="3-6"?(p.edadMax>=3&&p.edadMin<6):false));
+const ETAPAS=[["todos","Todos"],["inmediata","Entrega inmediata"],["0-1","0 a 1 año"],["1-3","1 a 3 años"],["3-6","3 a 6 años"],["mueble","Muebles"],["regalo","Para regalar en Navidad"]];
+const enEtapa=(p,k)=>k==="todos"||(k==="inmediata"?p.seccion==="inmediata":false)||(p.etiquetas||[]).includes(k)||(p.edadMax<20&&(k==="0-1"?p.edadMin<1:k==="1-3"?(p.edadMin<3&&p.edadMax>=1):k==="3-6"?(p.edadMax>=3&&p.edadMin<6):false));
 const $=s=>document.querySelector(s);
 let filtro="todos", busq="", tipo="Familia";
 let cart={};
@@ -243,6 +245,8 @@ try{cart=JSON.parse(localStorage.getItem("rya-cart")||"{}")||{}}catch(e){cart={}
 const save=()=>{try{localStorage.setItem("rya-cart",JSON.stringify(cart))}catch(e){}};
 let byId={};
 const foto=k=>FOTOS[k]||k||"";
+const inm=p=>p.seccion==="inmediata";
+const media=(p,f,cls)=>f?`<img ${cls||'loading="lazy"'} src="${foto(f)}" alt="${esc(p.nombre)}">`:`<div class="emo" role="img" aria-label="${esc(p.nombre)}"><span>${p.emoji||"🌿"}</span></div>`;
 const usd=n=>"US$"+n.toFixed(2);
 const cor=n=>"C$"+Math.round(n*CONFIG.tipoCambio).toLocaleString("es-NI");
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -262,30 +266,35 @@ function renderChips(){
 function renderGrid(){
   const q=busq.trim().toLowerCase();
   const list=PRODUCTOS.filter(p=>p.disponible!==false&&enEtapa(p,filtro)&&(!q||(p.nombre+" "+p.frase+" "+p.descripcion).toLowerCase().includes(q)));
-  $("#grid").innerHTML=list.length?list.map(p=>`
+  const card=p=>`
     <article class="card" tabindex="0" data-id="${p.id}" aria-label="${esc(p.nombre)}">
-      <div class="ph"><img loading="lazy" src="${foto(p.fotos[0])}" alt="${esc(p.nombre)}">
-        <span class="badge">${esc(p.edad)}</span>${p.destacado?'<span class="badge ed">Edición limitada</span>':''}</div>
+      <div class="ph">${media(p,p.fotos[0])}
+        <span class="badge">${esc(p.edad)}</span>${p.agotado?'<span class="badge ed">Agotado</span>':p.destacado?'<span class="badge ed">Edición limitada</span>':p.enStock?'<span class="badge ed">Entrega inmediata</span>':''}</div>
       <div class="body"><h3>${esc(p.nombre)}</h3><div class="fr">${esc(p.frase)}</div>
-        <div class="row">${priceHTML(p)}<button class="add ${cart[p.id]?'in':''}" type="button" data-add="${p.id}">${cart[p.id]?'En tu lista ✓':'Pre-reservar'}</button></div></div>
-    </article>`).join(""):`<div class="empty">No encontramos ese juguete. Prueba con otra palabra o escríbenos.</div>`;
+        <div class="row">${priceHTML(p)}${p.agotado?`<a class="add" style="text-decoration:none" target="_blank" rel="noopener" href="${contactURL('Hola Raíces y Alas, avísenme cuando vuelva: '+p.nombre)}">Avisarme</a>`:`<button class="add ${cart[p.id]?'in':''}" type="button" data-add="${p.id}">${cart[p.id]?'En tu lista ✓':(p.enStock?'Pedir':'Pre-reservar')}</button>`}</div></div>
+    </article>`;
+  const A=list.filter(inm),B=list.filter(p=>!inm(p));
+  const head=(t,d)=>`<div class="sec-h"><h2>${t}</h2><p>${d}</p></div>`;
+  $("#grid").innerHTML=!list.length?`<div class="empty">No encontramos ese juguete. Prueba con otra palabra o escríbenos.</div>`
+    :(A.length&&B.length)?head("Entrega inmediata","Ya están en Nicaragua, listos para entregar.")+A.map(card).join("")+head("Primera colección Montessori","Apártalos con el 50%; llegan en diciembre.")+B.map(card).join("")
+    :list.map(card).join("");
 }
 function count(){const n=Object.values(cart).reduce((a,b)=>a+b,0);$("#count").textContent=n}
-function add(id){cart[id]=(cart[id]||0)+1;save();count();renderGrid();toast(byId[id].nombre+" agregado a tu pre-reserva")}
+function add(id){cart[id]=(cart[id]||0)+1;save();count();renderGrid();toast(byId[id].nombre+(byId[id].enStock?" agregado a tu pedido":" agregado a tu pre-reserva"))}
 
 function openProd(id){
   const p=byId[id];let i=0;
   const draw=()=>{
     $("#prod").innerHTML=`<button class="x" type="button" data-close aria-label="Cerrar">×</button>
-    <div class="gal"><img class="main" src="${foto(p.fotos[i])}" alt="${esc(p.nombre)}">
+    <div class="gal">${p.fotos.length?`<img class="main" src="${foto(p.fotos[i])}" alt="${esc(p.nombre)}">`:`<div class="ph" style="border-radius:20px">${media(p)}</div>`}
       ${p.fotos.length>1?`<div class="thumbs">${p.fotos.map((f,j)=>`<button type="button" data-th="${j}" aria-current="${j===i}" aria-label="Foto ${j+1}"><img src="${foto(f)}" alt=""></button>`).join("")}</div>`:""}</div>
     <div class="det"><span class="age">${esc(p.edad)}</span><h2 id="pTitle">${esc(p.nombre)}</h2><div class="fr">${esc(p.frase)}</div>
       <p style="margin:0">${esc(p.descripcion)}</p>
-      <ul class="bens">${p.beneficios.map(b=>`<li>${esc(b)}</li>`).join("")}</ul>
+      <ul class="bens">${(p.beneficios||[]).map(b=>`<li>${esc(b)}</li>`).join("")}</ul>
       <div class="chips2">${[p.material,p.detalle].filter(Boolean).map(x=>`<span>${esc(x)}</span>`).join("")}</div>
       ${priceHTML(p)}
-      <div class="note">Primera colección, seleccionada para ti. Apártalo con el 50%; la fecha de entrega se confirma al llegar a Nicaragua.</div>
-      <button class="big" type="button" data-add="${p.id}">${cart[p.id]?'Agregar otro':'Agregar a mi pre-reserva'}</button>
+      <div class="note">${p.agotado?'Este juguete se agotó por ahora. Escríbenos y te avisamos cuando vuelva.':p.enStock?'Ya está en Nicaragua, listo para entregar.':'Primera colección, seleccionada para ti. Apártalo con el 50%; la fecha de entrega se confirma al llegar a Nicaragua.'}</div>
+      ${p.agotado?'':`<button class="big" type="button" data-add="${p.id}">${cart[p.id]?'Agregar otro':(p.enStock?'Agregar a mi pedido':'Agregar a mi pre-reserva')}</button>`}
       <a class="big sec" style="text-align:center;text-decoration:none" target="_blank" rel="noopener" href="${contactURL('Hola Raíces y Alas, quiero saber más de: '+p.nombre)}">Preguntar por ${CONFIG.whatsapp?'WhatsApp':'Instagram'}</a>
     </div>`;
   };
@@ -294,25 +303,29 @@ function openProd(id){
 }
 function message(){
   const f=id=>($("#"+id)?.value||"").trim();
-  let tot=0,hasAll=true;
-  const lines=Object.entries(cart).map(([id,q])=>{const p=byId[id];if(p.precio==null)hasAll=false;else tot+=p.precio*q;return `• ${q} × ${p.nombre}${p.precio!=null?' ('+usd(p.precio*q)+')':''}`});
-  let t=`Hola Raíces y Alas 🌿 Quiero pre-reservar de la primera colección:\n${lines.join("\n")}`;
-  if(hasAll&&tot>0) t+=`\n\nTotal: ${usd(tot)} (${cor(tot)})\nPre-reserva 50%: ${usd(tot*CONFIG.anticipo)} (${cor(tot*CONFIG.anticipo)})`;
+  const ent=Object.entries(cart);const ya=ent.filter(([id])=>byId[id].enStock),pre=ent.filter(([id])=>!byId[id].enStock);
+  const sum=L=>{let t=0,ok=true;for(const [id,q] of L){const p=byId[id];if(p.precio==null)ok=false;else t+=p.precio*q}return {t,ok}};
+  const ln=L=>L.map(([id,q])=>{const p=byId[id];return `• ${q} × ${p.nombre}${p.precio!=null?' ('+usd(p.precio*q)+')':''}`}).join("\n");
+  const A=sum(ya),B=sum(pre);
+  let t="Hola Raíces y Alas 🌿";
+  if(ya.length){t+=`\n\nQuiero pedir (entrega inmediata):\n${ln(ya)}`;if(A.ok&&A.t>0)t+=`\nTotal: ${usd(A.t)} (${cor(A.t)})`}
+  if(pre.length){t+=`\n\nQuiero pre-reservar de la primera colección:\n${ln(pre)}`;if(B.ok&&B.t>0)t+=`\nTotal: ${usd(B.t)} (${cor(B.t)})\nPre-reserva 50%: ${usd(B.t*CONFIG.anticipo)} (${cor(B.t*CONFIG.anticipo)})`}
   t+=`\n\nSoy: ${tipo}`;
   if(f("cNom")) t+=`\nNombre: ${f("cNom")}`;
   if(f("cCiu")) t+=`\nCiudad: ${f("cCiu")}`;
   if(f("cNota")) t+=`\nNota: ${f("cNota")}`;
-  t+=`\n\n¿Me confirman cómo hacer el pago del 50%?`;
-  return {t,tot,hasAll};
+  t+=ya.length&&!pre.length?`\n\n¿Me confirman cómo hacer el pago y la entrega?`:`\n\n¿Me confirman cómo hacer el pago?`;
+  return {t,A,B,ya,pre};
 }
 function renderCart(){
   const ids=Object.keys(cart);
-  const {t,tot,hasAll}=message();
+  const {t,A,B,ya,pre}=message();
+  const totHTML=(ya.length?(A.ok&&A.t>0?`<div><span>Entrega inmediata</span><span>${usd(A.t)} · ${cor(A.t)}</span></div>`:''):'')+(pre.length?(B.ok&&B.t>0?`<div><span>Pre-reserva (total)</span><span>${usd(B.t)} · ${cor(B.t)}</span></div><div class="hl"><span>Para apartar (50%)</span><span>${usd(B.t*CONFIG.anticipo)} · ${cor(B.t*CONFIG.anticipo)}</span></div>`:`<div><span>Te enviamos el total y el 50% para apartar por mensaje.</span></div>`):'');
   $("#cart").innerHTML=`<button class="x" type="button" data-close aria-label="Cerrar">×</button>
-   <div><div class="kicker">Primera colección</div><h2 id="cTitle" style="font-size:30px;margin-top:6px">Mi pre-reserva</h2></div>
-   ${ids.length?`<div>${ids.map(id=>{const p=byId[id];return `<div class="line"><img src="${foto(p.fotos[0])}" alt=""><div><b>${esc(p.nombre)}</b><small>${p.precio!=null?usd(p.precio):'Precio al pre-reservar'}</small></div>
+   <div><div class="kicker">Raíces y Alas</div><h2 id="cTitle" style="font-size:30px;margin-top:6px">Mi pedido</h2></div>
+   ${ids.length?`<div>${ids.map(id=>{const p=byId[id];return `<div class="line">${p.fotos.length?`<img src="${foto(p.fotos[0])}" alt="">`:`<span style="width:56px;height:56px;border-radius:12px;background:var(--durazno,#F6D9BF);display:grid;place-items:center;font-size:26px">${p.emoji||"🌿"}</span>`}<div><b>${esc(p.nombre)}</b><small>${p.precio!=null?usd(p.precio):'Precio al pre-reservar'}${p.enStock?' · Entrega inmediata':''}</small></div>
      <div class="qty"><button type="button" data-dec="${id}" aria-label="Quitar uno">−</button><span>${cart[id]}</span><button type="button" data-inc="${id}" aria-label="Agregar uno">+</button></div></div>`}).join("")}</div>
-   <div class="tot">${hasAll&&tot>0?`<div><span>Total</span><span>${usd(tot)} · ${cor(tot)}</span></div><div class="hl"><span>Para apartar (50%)</span><span>${usd(tot*CONFIG.anticipo)} · ${cor(tot*CONFIG.anticipo)}</span></div>`:`<div><span>Te enviamos el total y el 50% para apartar por mensaje.</span></div>`}</div>
+   <div class="tot">${totHTML}</div>
    <div class="seg" role="group" aria-label="Tipo de cliente">${[["Familia","Para mi familia"],["Mayoreo","Al por mayor"],["Socio institucional","Colegio, guardería o clínica"]].map(([x,l])=>`<button type="button" data-tipo="${x}" aria-pressed="${tipo===x}">${l}</button>`).join("")}</div>
    <label class="f" for="cNom">Tu nombre<input id="cNom" autocomplete="name" placeholder="Ej. Ana López"></label>
    <label class="f" for="cCiu">Ciudad<input id="cCiu" placeholder="Ej. Managua"></label>
@@ -340,11 +353,33 @@ document.addEventListener("click",e=>{
 document.addEventListener("keydown",e=>{if(e.key==="Escape")hideAll();if(e.key==="Enter"&&e.target.classList?.contains("card"))openProd(e.target.dataset.id)});
 document.addEventListener("input",e=>{if(e.target.id==="q"){busq=e.target.value;renderGrid()}else if(["cNom","cCiu","cNota"].includes(e.target.id))refreshMsg()});
 $("#openCart").onclick=()=>{renderCart();show("#cart")};
+/* Google Sheets: pestaña "Catalogo web" publicada como CSV (columnas: id, precio_usd, existencias, visible, destacado).
+   Celda vacía = se usa lo de productos.json. existencias vacía = pre-reserva; 0 = Agotado; >0 = Entrega inmediata (nunca se muestra el número). */
+function parseCSV(t){const R=[];let r=[],c="",q=false;for(let i=0;i<t.length;i++){const ch=t[i];if(q){if(ch=='"'){if(t[i+1]=='"'){c+='"';i++}else q=false}else c+=ch}else if(ch=='"')q=true;else if(ch==","){r.push(c);c=""}else if(ch=="\n"||ch=="\r"){if(ch=="\r"&&t[i+1]=="\n")i++;r.push(c);R.push(r);r=[];c=""}else c+=ch}if(c||r.length){r.push(c);R.push(r)}return R}
+const num=v=>{v=String(v??"").replace(/[^\d.,-]/g,"");if(!v)return null;if(v.includes(",")&&!v.includes("."))v=v.replace(",",".");else v=v.replace(/,/g,"");const n=parseFloat(v);return isNaN(n)?null:n};
+const siNo=v=>{v=String(v??"").trim().toLowerCase();return v===""?null:["si","sí","yes","true","1","x"].includes(v)};
+async function aplicarHoja(){
+  if(!CONFIG.hojaCSV)return;
+  try{
+    const r=await fetch(CONFIG.hojaCSV+(CONFIG.hojaCSV.includes("?")?"&":"?")+"t="+Date.now());if(!r.ok)return;
+    const rows=parseCSV(await r.text());const h=(rows.shift()||[]).map(x=>x.trim().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z]+/g,"_").replace(/^_|_$/g,""));
+    const col=k=>h.findIndex(x=>x.startsWith(k));const ci=col("id"),cp=col("precio"),ce=col("existencia"),cv=col("visible"),cd=col("destacado");
+    if(ci<0)return;const m=Object.fromEntries(PRODUCTOS.map(p=>[p.id,p]));
+    for(const row of rows){const p=m[(row[ci]||"").trim()];if(!p)continue;
+      if(cp>=0&&num(row[cp])!=null)p.precio=num(row[cp]);
+      if(cv>=0&&siNo(row[cv])!=null)p.disponible=siNo(row[cv]);
+      if(cd>=0&&siNo(row[cd])!=null)p.destacado=siNo(row[cd]);
+      const e=ce>=0?num(row[ce]):null;if(e!=null){p.agotado=e<=0;p.enStock=e>0||inm(p)}}
+  }catch(e){}
+}
 async function init(){
   try{const c=await fetch("config.json",{cache:"no-store"});if(c.ok)Object.assign(CONFIG,await c.json())}catch(e){}
   if(!PRODUCTOS.length){try{const r=await fetch("productos.json",{cache:"no-store"});PRODUCTOS=await r.json()}catch(e){$("#grid").innerHTML='<div class="empty">No pudimos cargar el catálogo. Recarga la página.</div>'}}
+  for(const p of PRODUCTOS) if(inm(p)) p.enStock=true;
+  await aplicarHoja();
   byId=Object.fromEntries(PRODUCTOS.map(p=>[p.id,p]));
-  for(const id of Object.keys(cart)) if(!byId[id]) delete cart[id];
+  for(const id of Object.keys(cart)) if(!byId[id]||byId[id].agotado||byId[id].disponible===false) delete cart[id];
+  save();
   $("#lnkMay").href=contactURL("Hola Raíces y Alas, MAYOREO: quiero conocer sus precios al por mayor.");
   $("#lnkSoc").href=contactURL("Hola Raíces y Alas, SOCIOS: represento un colegio/guardería/clínica y quiero información.");
   renderChips();renderGrid();count();
