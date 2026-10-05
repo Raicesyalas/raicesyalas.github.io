@@ -254,8 +254,9 @@ function priceHTML(p){
   if(p.precio==null) return `<div class="price pend">Precio al pre-reservar</div>`;
   return `<div class="price">${usd(p.precio)}<small>${cor(p.precio)}</small></div>`;
 }
+const pegar=()=>!CONFIG.whatsapp||/^http/.test(CONFIG.whatsapp);const canal=()=>CONFIG.whatsapp?"WhatsApp":"Instagram";
 function contactURL(text){
-  if(CONFIG.whatsapp) return "https://wa.me/"+CONFIG.whatsapp+"?text="+encodeURIComponent(text);
+  if(CONFIG.whatsapp) return /^http/.test(CONFIG.whatsapp)?CONFIG.whatsapp:"https://wa.me/"+String(CONFIG.whatsapp).replace(/\D/g,"")+"?text="+encodeURIComponent(text);
   return "https://ig.me/m/"+CONFIG.instagram;
 }
 function toast(t){const el=$("#toast");el.textContent=t;el.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>el.hidden=true,2200)}
@@ -295,7 +296,7 @@ function openProd(id){
       ${priceHTML(p)}
       <div class="note">${p.agotado?'Este juguete se agotó por ahora. Escríbenos y te avisamos cuando vuelva.':p.enStock?'Ya está en Nicaragua, listo para entregar.':'Primera colección, seleccionada para ti. Apártalo con el 50%; la fecha de entrega se confirma al llegar a Nicaragua.'}</div>
       ${p.agotado?'':`<button class="big" type="button" data-add="${p.id}">${cart[p.id]?'Agregar otro':(p.enStock?'Agregar a mi pedido':'Agregar a mi pre-reserva')}</button>`}
-      <a class="big sec" style="text-align:center;text-decoration:none" target="_blank" rel="noopener" href="${contactURL('Hola Raíces y Alas, quiero saber más de: '+p.nombre)}">Preguntar por ${CONFIG.whatsapp?'WhatsApp':'Instagram'}</a>
+      <a class="big sec" style="text-align:center;text-decoration:none" target="_blank" rel="noopener" data-copy="${esc('Hola Raíces y Alas, quiero saber más de: '+p.nombre)}" href="${contactURL('Hola Raíces y Alas, quiero saber más de: '+p.nombre)}">Preguntar por ${CONFIG.whatsapp?'WhatsApp':'Instagram'}</a>
     </div>`;
   };
   draw();$("#prod").onclick=e=>{const t=e.target.closest("[data-th]");if(t){i=+t.dataset.th;draw()}};
@@ -331,8 +332,8 @@ function renderCart(){
    <label class="f" for="cCiu">Ciudad<input id="cCiu" placeholder="Ej. Managua"></label>
    <label class="f" for="cNota">Nota (opcional)<textarea id="cNota" rows="2" placeholder="Ej. es para regalo de Navidad"></textarea></label>
    <div><div class="kicker" style="margin-bottom:6px">Mensaje que vas a enviar</div><div class="msg" id="msg">${esc(t)}</div></div>
-   <a class="big" id="send" style="text-align:center;text-decoration:none" target="_blank" rel="noopener" href="${contactURL(t)}">${CONFIG.whatsapp?'Enviar por WhatsApp':'Enviar por Instagram'}</a>
-   ${CONFIG.whatsapp?'':'<button class="big sec" type="button" id="copy">Copiar mensaje</button><small style="color:var(--muted)">Copia el mensaje y pégalo en el chat de Instagram que se abre.</small>'}`
+   <a class="big" id="send" style="text-align:center;text-decoration:none" target="_blank" rel="noopener" href="${contactURL(t)}">${!CONFIG.whatsapp?'Copiar mensaje y abrir Instagram':pegar()?'Copiar mensaje y abrir WhatsApp':'Enviar por WhatsApp'}</a>
+   ${!pegar()?'':'<small style="color:var(--muted);text-align:center">'+(CONFIG.whatsapp?'WhatsApp':'Instagram')+' no deja escribir el mensaje por ti: al tocar el botón lo copiamos solito. En el chat, mantén presionado y toca <b>Pegar</b>, luego envíalo.</small><button class="big sec" type="button" id="copy">Solo copiar el mensaje</button>'}`
    :`<p style="color:var(--muted)">Todavía no has elegido juguetes. Toca “Pre-reservar” en los que te gusten y aquí armamos tu mensaje.</p><button class="big sec" type="button" data-close>Ver la colección</button>`}`;
 }
 function refreshMsg(){const {t}=message();const m=$("#msg");if(m){m.textContent=t;$("#send").href=contactURL(t)}}
@@ -340,7 +341,10 @@ let last=null;
 function show(sel){last=document.activeElement;$("#scrim").hidden=false;$(sel).hidden=false;$(sel).querySelector("button,a,input")?.focus();document.body.style.overflow="hidden"}
 function hideAll(){$("#scrim").hidden=true;$("#prod").hidden=true;$("#cart").hidden=true;document.body.style.overflow="";last?.focus?.()}
 
+function copiar(t){let ok=false;try{const a=document.createElement("textarea");a.value=t;a.setAttribute("readonly","");a.style.cssText="position:fixed;top:0;left:0;opacity:0";document.body.appendChild(a);a.focus();a.select();a.setSelectionRange(0,t.length);ok=document.execCommand("copy");a.remove()}catch(e){}try{navigator.clipboard&&navigator.clipboard.writeText(t).catch(()=>{})}catch(e){}return ok}
 document.addEventListener("click",e=>{
+  const snd=e.target.closest("#send");if(snd&&pegar()){copiar(message().t);toast("Mensaje copiado ✓ Pégalo en el chat de "+canal());return}
+  const dc=e.target.closest("[data-copy]");if(dc&&pegar()){copiar(dc.dataset.copy);toast("Mensaje copiado ✓ Pégalo en el chat de "+canal());return}
   const a=e.target.closest("[data-add]");if(a){e.stopPropagation();add(a.dataset.add);if(!$("#prod").hidden){hideAll();renderCart();show("#cart")}return}
   const c=e.target.closest(".chip[data-k]");if(c){filtro=c.dataset.k;renderChips();renderGrid();return}
   const card=e.target.closest(".card");if(card){openProd(card.dataset.id);return}
@@ -348,7 +352,7 @@ document.addEventListener("click",e=>{
   const inc=e.target.closest("[data-inc]");if(inc){cart[inc.dataset.inc]++;save();count();renderCart();renderGrid();return}
   const dec=e.target.closest("[data-dec]");if(dec){const id=dec.dataset.dec;cart[id]--;if(cart[id]<=0)delete cart[id];save();count();renderCart();renderGrid();return}
   const tp=e.target.closest("[data-tipo]");if(tp){tipo=tp.dataset.tipo;const v=["cNom","cCiu","cNota"].map(i=>$("#"+i)?.value);renderCart();["cNom","cCiu","cNota"].forEach((i,j)=>{if($("#"+i))$("#"+i).value=v[j]||""});refreshMsg();return}
-  if(e.target.id==="copy"){const {t}=message();navigator.clipboard?.writeText(t).then(()=>toast("Mensaje copiado")).catch(()=>{const r=document.createRange();r.selectNodeContents($("#msg"));getSelection().removeAllRanges();getSelection().addRange(r);toast("Selecciona y copia el mensaje")});return}
+  if(e.target.id==="copy"){const {t}=message();copiar(t);toast("Mensaje copiado ✓");return}
 });
 document.addEventListener("keydown",e=>{if(e.key==="Escape")hideAll();if(e.key==="Enter"&&e.target.classList?.contains("card"))openProd(e.target.dataset.id)});
 document.addEventListener("input",e=>{if(e.target.id==="q"){busq=e.target.value;renderGrid()}else if(["cNom","cCiu","cNota"].includes(e.target.id))refreshMsg()});
