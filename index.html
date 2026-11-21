@@ -8,20 +8,20 @@
 <style>
 /* Layout: tienda de una columna — cabecera fija, franja de pre-reserva, filtros por etapa, rejilla de productos, ficha y carrito como paneles */
 :root{
-  --bg:#F6F0E4; --bg2:#EDE3CD; --card:#FFFDF8; --ink:#3A3A32; --muted:#6E6A5C;
-  --raiz:#2E5631; --ala:#F08342; --terra:#C96A34; --salvia:#8FA968; --salvia-l:#DCE3C8; --durazno:#F6D9BF;
-  --on-raiz:#F6F0E4; --line:#E2D7BE; --shadow:#2E5631;
-  --f-display:'Playfair Display',Georgia,'Times New Roman',serif;
-  --f-body:'Poppins',system-ui,-apple-system,'Segoe UI',sans-serif;
+--bg:#F6F0E4; --bg2:#EDE3CD; --card:#FFFDF8; --ink:#3A3A32; --muted:#6E6A5C;
+--raiz:#2E5631; --ala:#F08342; --terra:#C96A34; --salvia:#8FA968; --salvia-l:#DCE3C8; --durazno:#F6D9BF;
+--on-raiz:#F6F0E4; --line:#E2D7BE; --shadow:#2E5631;
+--f-display:'Playfair Display',Georgia,'Times New Roman',serif;
+--f-body:'Poppins',system-ui,-apple-system,'Segoe UI',sans-serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#17241A; --bg2:#1F3A22; --card:#223326; --ink:#EFE8D8; --muted:#B9B29F;
-  --raiz:#A9C48C; --ala:#F39A62; --terra:#E59A6B; --salvia:#8FA968; --salvia-l:#2C4630; --durazno:#4A3428;
-  --on-raiz:#17241A; --line:#33503A; --shadow:#0D150F; color-scheme:dark}}
+--bg:#17241A; --bg2:#1F3A22; --card:#223326; --ink:#EFE8D8; --muted:#B9B29F;
+--raiz:#A9C48C; --ala:#F39A62; --terra:#E59A6B; --salvia:#8FA968; --salvia-l:#2C4630; --durazno:#4A3428;
+--on-raiz:#17241A; --line:#33503A; --shadow:#0D150F; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#17241A; --bg2:#1F3A22; --card:#223326; --ink:#EFE8D8; --muted:#B9B29F;
-  --raiz:#A9C48C; --ala:#F39A62; --terra:#E59A6B; --salvia:#8FA968; --salvia-l:#2C4630; --durazno:#4A3428;
-  --on-raiz:#17241A; --line:#33503A; --shadow:#0D150F; color-scheme:dark}
+--bg:#17241A; --bg2:#1F3A22; --card:#223326; --ink:#EFE8D8; --muted:#B9B29F;
+--raiz:#A9C48C; --ala:#F39A62; --terra:#E59A6B; --salvia:#8FA968; --salvia-l:#2C4630; --durazno:#4A3428;
+--on-raiz:#17241A; --line:#33503A; --shadow:#0D150F; color-scheme:dark}
 *{box-sizing:border-box} [hidden]{display:none!important} img{max-width:100%}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55;margin:0}
 button,input,select,textarea{font:inherit;color:inherit}
@@ -85,6 +85,12 @@ em{font-style:italic;color:var(--terra)}
 .sec-h{grid-column:1/-1;margin:14px 0 -4px;display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px}.sec-h h2{font-size:clamp(22px,3vw,30px)}.sec-h p{margin:0;color:var(--muted);font-size:14px}
 .ph .emo{position:absolute;inset:0;display:grid;place-items:center}.ph .emo span{width:46%;aspect-ratio:1;border-radius:50%;background:var(--durazno,#F6D9BF);display:grid;place-items:center;font-size:clamp(40px,7vw,64px)}
 .empty{grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)}
+.vars{display:grid;gap:6px}.vchips{display:flex;flex-wrap:wrap;gap:6px}
+.vchip{border:1.5px solid var(--line);background:var(--card);border-radius:999px;padding:6px 12px;font-size:13px;cursor:pointer;text-transform:capitalize}
+.vchip[aria-pressed="true"]{border-color:var(--raiz);background:var(--raiz);color:var(--on-raiz)}
+.vchip.off{opacity:.55;text-decoration:line-through}
+.ncol{font-size:12px;color:var(--muted)}.ncol b{text-transform:capitalize;color:var(--ink)}
+.gal .mw{overflow:hidden;aspect-ratio:1/1;width:100%}.gal .mw .main{width:100%;height:100%;display:block}
 
 /* bloques informativos */
 .info{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;padding-block:10px 50px}
@@ -139,86 +145,86 @@ label.f input,label.f textarea{border:1.5px solid var(--line);background:var(--c
 .toast{white-space:nowrap;max-width:calc(100vw - 32px);overflow:hidden;text-overflow:ellipsis;position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 22px);transform:translateX(-50%);background:var(--raiz);color:var(--on-raiz);padding:10px 18px;border-radius:999px;z-index:60;font-size:14px;box-shadow:4px 4px 0 var(--ala)}
 
 @media (max-width:820px){
-  .hero{grid-template-columns:1fr}
-  .heroimg{max-width:300px;margin:0 auto;width:100%}
-  .info{grid-template-columns:1fr}
-  .sheet.prod{grid-template-columns:1fr;top:auto;bottom:0;left:0;transform:none;width:100%;max-height:92dvh;border-radius:26px 26px 0 0}
-  .filters{top:calc(env(safe-area-inset-top,0px) + 67px)}
+.hero{grid-template-columns:1fr}
+.heroimg{max-width:300px;margin:0 auto;width:100%}
+.info{grid-template-columns:1fr}
+.sheet.prod{grid-template-columns:1fr;top:auto;bottom:0;left:0;transform:none;width:100%;max-height:92dvh;border-radius:26px 26px 0 0}
+.filters{top:calc(env(safe-area-inset-top,0px) + 67px)}
 }
 @media (max-width:480px){
-  .brand b{font-size:17px}
-  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-  .body{padding:10px 12px 12px}
-  .body h3{font-size:16px}
-  .body .fr{display:none}
-  .row{flex-direction:column;align-items:stretch}
-  .add{width:100%}
-  .cartbtn .lbl{display:none}
-  .badge.ed{left:10px;right:auto;top:auto;bottom:10px}
+.brand b{font-size:17px}
+.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.body{padding:10px 12px 12px}
+.body h3{font-size:16px}
+.body .fr{display:none}
+.row{flex-direction:column;align-items:stretch}
+.add{width:100%}
+.cartbtn .lbl{display:none}
+.badge.ed{left:10px;right:auto;top:auto;bottom:10px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 
 </head><body>
 <header class="top">
-  <div class="wrap">
-    <a class="brand" href="#inicio"><img src="logo.png" alt="Logo Raíces y Alas"><b>Raíces <i>y</i> Alas</b></a>
-    <div class="spacer"></div>
-    <button class="cartbtn" id="openCart" type="button" aria-label="Ver mi pedido">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 7h12l-1 13H7L6 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
-      <span class="lbl">Mi pedido</span><span class="n" id="count">0</span>
-    </button>
-  </div>
+<div class="wrap">
+<a class="brand" href="#inicio"><img src="logo.png" alt="Logo Raíces y Alas"><b>Raíces <i>y</i> Alas</b></a>
+<div class="spacer"></div>
+<button class="cartbtn" id="openCart" type="button" aria-label="Ver mi pedido">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 7h12l-1 13H7L6 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
+<span class="lbl">Mi pedido</span><span class="n" id="count">0</span>
+</button>
+</div>
 </header>
 
 <main id="inicio">
-  <section class="wrap hero">
-    <div>
-      <div class="kicker">Primera colección · Edición limitada</div>
-      <h1>Juguetes que dan <em>raíces</em> y también <em>alas</em></h1>
-      <p>Juguetes y muebles Montessori de madera, seleccionados uno por uno para acompañar cada etapa de tu peque. La colección llega en diciembre y ya puedes apartar el tuyo.</p>
-      <div class="steps" aria-label="Cómo pre-reservar">
-        <div class="step"><span>1</span>Elige tus favoritos</div>
-        <div class="step"><span>2</span>Envíanos tu lista por WhatsApp</div>
-        <div class="step"><span>3</span>Aparta con el 50%</div>
-      </div>
-    </div>
-    <div class="heroimg" aria-hidden="true">
-      <div class="blob"></div><div class="ring"></div>
-      <img src="fotos/pueblo-de-cuentos.jpg" alt="">
-      <div class="tag">Llega en diciembre</div>
-    </div>
-  </section>
+<section class="wrap hero">
+<div>
+<div class="kicker">Primera colección · Edición limitada</div>
+<h1>Juguetes que dan <em>raíces</em> y también <em>alas</em></h1>
+<p>Juguetes y muebles Montessori de madera, seleccionados uno por uno para acompañar cada etapa de tu peque. La colección llega en diciembre y ya puedes apartar el tuyo.</p>
+<div class="steps" aria-label="Cómo pre-reservar">
+<div class="step"><span>1</span>Elige tus favoritos</div>
+<div class="step"><span>2</span>Envíanos tu lista por WhatsApp</div>
+<div class="step"><span>3</span>Aparta con el 50%</div>
+</div>
+</div>
+<div class="heroimg" aria-hidden="true">
+<div class="blob"></div><div class="ring"></div>
+<img src="fotos/pueblo-de-cuentos.jpg" alt="">
+<div class="tag">Llega en diciembre</div>
+</div>
+</section>
 
-  <div class="wrap filters">
-    <div class="chips" role="group" aria-label="Filtrar por etapa" id="chips"></div>
-    <label class="search"><span hidden>Buscar</span>
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
-      <input id="q" type="search" placeholder="Buscar juguete">
-    </label>
-  </div>
+<div class="wrap filters">
+<div class="chips" role="group" aria-label="Filtrar por etapa" id="chips"></div>
+<label class="search"><span hidden>Buscar</span>
+<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+<input id="q" type="search" placeholder="Buscar juguete">
+</label>
+</div>
 
-  <section class="wrap grid" id="grid" aria-live="polite"></section>
+<section class="wrap grid" id="grid" aria-live="polite"></section>
 
-  <section class="wrap info">
-    <div class="box g">
-      <div class="kicker">Pre-reserva</div>
-      <h3>Apártalo con el 50%</h3>
-      <p>Te confirmamos disponibilidad y la fecha de entrega en cuanto la colección esté en Nicaragua. El resto lo pagas al recibir.</p>
-    </div>
-    <div class="box">
-      <div class="kicker">Precio al por mayor</div>
-      <h3>¿Compras para revender o regalar en grupo?</h3>
-      <p>Tenemos precios especiales por volumen. Escríbenos la palabra MAYOREO y te enviamos la lista.</p>
-      <a class="lnk" id="lnkMay" href="#" target="_blank" rel="noopener">Pedir precios de mayoreo →</a>
-    </div>
-    <div class="box">
-      <div class="kicker">Socios clave</div>
-      <h3>Colegios, guarderías y clínicas pediátricas</h3>
-      <p>Somos proveedores de espacios para la infancia: precio institucional, asesoría para equipar y prioridad para apartar.</p>
-      <a class="lnk" id="lnkSoc" href="#" target="_blank" rel="noopener">Quiero ser socio →</a>
-    </div>
-  </section>
+<section class="wrap info">
+<div class="box g">
+<div class="kicker">Pre-reserva</div>
+<h3>Apártalo con el 50%</h3>
+<p>Te confirmamos disponibilidad y la fecha de entrega en cuanto la colección esté en Nicaragua. El resto lo pagas al recibir.</p>
+</div>
+<div class="box">
+<div class="kicker">Precio al por mayor</div>
+<h3>¿Compras para revender o regalar en grupo?</h3>
+<p>Tenemos precios especiales por volumen. Escríbenos la palabra MAYOREO y te enviamos la lista.</p>
+<a class="lnk" id="lnkMay" href="#" target="_blank" rel="noopener">Pedir precios de mayoreo →</a>
+</div>
+<div class="box">
+<div class="kicker">Socios clave</div>
+<h3>Colegios, guarderías y clínicas pediátricas</h3>
+<p>Somos proveedores de espacios para la infancia: precio institucional, asesoría para equipar y prioridad para apartar.</p>
+<a class="lnk" id="lnkSoc" href="#" target="_blank" rel="noopener">Quiero ser socio →</a>
+</div>
+</section>
 </main>
 
 <footer><div class="wrap"><span>Raíces y Alas · Managua, Nicaragua · @raicesyalas.ni</span><span>Fotos referenciales. Precios en US$ y C$.</span></div></footer>
@@ -234,6 +240,8 @@ label.f input,label.f textarea{border:1.5px solid var(--line);background:var(--c
 let CONFIG = {whatsapp:"",instagram:"raicesyalas.ni",tipoCambio:36.6243,anticipo:0.5,hojaCSV:""};
 let PRODUCTOS = [];
 const FOTOS = {};
+/* Conexión con el sistema de gestión: disponibilidad, precios, fotos y colores en vivo (lectura pública, nunca cantidades) */
+const SISTEMA = {url:"https://eskjgdachoakqfllpbjo.supabase.co",clave:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVza2pnZGFjaG9ha3FmbGxwYmpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEwNjUzMjQsImV4cCI6MjEwNjY0MTMyNH0.9dMmxFt84Oovyk6-ebTxjftFkGTMMWHjbJ3L-3FX9E0"};
 /* ==================================================== */
 
 const ETAPAS=[["todos","Todos"],["inmediata","Entrega inmediata"],["0-1","0 a 1 año"],["1-3","1 a 3 años"],["3-6","3 a 6 años"],["mueble","Muebles"],["regalo","Para regalar en Navidad"]];
@@ -244,97 +252,105 @@ let cart={};
 try{cart=JSON.parse(localStorage.getItem("rya-cart")||"{}")||{}}catch(e){cart={}}
 const save=()=>{try{localStorage.setItem("rya-cart",JSON.stringify(cart))}catch(e){}};
 let byId={};
-const foto=k=>FOTOS[k]||k||"";
+const foto=k=>k&&typeof k==="object"?k.url:(FOTOS[k]||k||"");
+const enc=f=>f&&typeof f==="object"?(f.encuadre||{}):{};
+function estImg(f){const e=enc(f);if(!e.ajuste&&!e.zoom&&!e.fondo)return "";const fit=e.ajuste||"contain",x=e.x??50,y=e.y??50,z=e.zoom||1;return `object-fit:${fit};object-position:${x}% ${y}%;${z!==1?`transform:scale(${z});transform-origin:${x}% ${y}%;`:""}${fit==="cover"?"padding:0;":""}${e.fondo?`background:${e.fondo};`:""}`}
+function fotosDe(p,v){const L=p.fotos||[];const vari=f=>f&&typeof f==="object"?f.variante:null;let r=v&&L.some(f=>vari(f)===v)?[...L.filter(f=>vari(f)===v),...L.filter(f=>!vari(f))]:(v?L.filter(f=>!vari(f)||vari(f)===v):L);if(!r.length)r=L;return r.slice(0,p.maxFotos||12)}
+const enCarrito=id=>Object.keys(cart).some(k=>k===id||k.startsWith(id+"::"));
+function P(k){const [id,v]=String(k).split("::");const b=byId[id];if(!b)return null;if(!v)return b;const x=(b.variantes||[]).find(y=>y.nombre===v)||{};return Object.assign(Object.create(b),{nombre:b.nombre+" · "+v,precio:x.precio!=null?+x.precio:b.precio,fotos:fotosDe(b,v),agotado:x.estado?x.estado==="agotado":b.agotado,enStock:x.estado?x.estado==="disponible":b.enStock})}
 const inm=p=>p.seccion==="inmediata";
-const media=(p,f,cls)=>f?`<img ${cls||'loading="lazy"'} src="${foto(f)}" alt="${esc(p.nombre)}">`:`<div class="emo" role="img" aria-label="${esc(p.nombre)}"><span>${p.emoji||"🌿"}</span></div>`;
+const media=(p,f,cls)=>f?`<img ${cls||'loading="lazy"'} src="${foto(f)}" alt="${esc(p.nombre)}" style="${estImg(f)}">`:`<div class="emo" role="img" aria-label="${esc(p.nombre)}"><span>${p.emoji||"🌿"}</span></div>`;
 const usd=n=>"US$"+n.toFixed(2);
 const cor=n=>"C$"+Math.round(n*CONFIG.tipoCambio).toLocaleString("es-NI");
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 function priceHTML(p){
-  if(p.precio==null) return `<div class="price pend">Precio al pre-reservar</div>`;
-  return `<div class="price">${usd(p.precio)}<small>${cor(p.precio)}</small></div>`;
+if(p.precio==null) return `<div class="price pend">Precio al pre-reservar</div>`;
+return `<div class="price">${usd(p.precio)}<small>${cor(p.precio)}</small></div>`;
 }
 const pegar=()=>!CONFIG.whatsapp||/^http/.test(CONFIG.whatsapp);const canal=()=>CONFIG.whatsapp?"WhatsApp":"Instagram";
 function contactURL(text){
-  if(CONFIG.whatsapp) return /^http/.test(CONFIG.whatsapp)?CONFIG.whatsapp:"https://wa.me/"+String(CONFIG.whatsapp).replace(/\D/g,"")+"?text="+encodeURIComponent(text);
-  return "https://ig.me/m/"+CONFIG.instagram;
+if(CONFIG.whatsapp) return /^http/.test(CONFIG.whatsapp)?CONFIG.whatsapp:"https://wa.me/"+String(CONFIG.whatsapp).replace(/\D/g,"")+"?text="+encodeURIComponent(text);
+return "https://ig.me/m/"+CONFIG.instagram;
 }
 function toast(t){const el=$("#toast");el.textContent=t;el.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>el.hidden=true,2200)}
 
 function renderChips(){
-  $("#chips").innerHTML=ETAPAS.map(([k,l])=>`<button class="chip" type="button" data-k="${k}" aria-pressed="${k===filtro}">${l}</button>`).join("");
+$("#chips").innerHTML=ETAPAS.map(([k,l])=>`<button class="chip" type="button" data-k="${k}" aria-pressed="${k===filtro}">${l}</button>`).join("");
 }
 function renderGrid(){
-  const q=busq.trim().toLowerCase();
-  const list=PRODUCTOS.filter(p=>p.disponible!==false&&enEtapa(p,filtro)&&(!q||(p.nombre+" "+p.frase+" "+p.descripcion).toLowerCase().includes(q)));
-  const card=p=>`
-    <article class="card" tabindex="0" data-id="${p.id}" aria-label="${esc(p.nombre)}">
-      <div class="ph">${media(p,p.fotos[0])}
-        <span class="badge">${esc(p.edad)}</span>${p.agotado?'<span class="badge ed">Agotado</span>':p.destacado?'<span class="badge ed">Edición limitada</span>':p.enStock?'<span class="badge ed">Entrega inmediata</span>':''}</div>
-      <div class="body"><h3>${esc(p.nombre)}</h3><div class="fr">${esc(p.frase)}</div>
-        <div class="row">${priceHTML(p)}${p.agotado?`<a class="add" style="text-decoration:none" target="_blank" rel="noopener" href="${contactURL('Hola Raíces y Alas, avísenme cuando vuelva: '+p.nombre)}">Avisarme</a>`:`<button class="add ${cart[p.id]?'in':''}" type="button" data-add="${p.id}">${cart[p.id]?'En tu lista ✓':(p.enStock?'Pedir':'Pre-reservar')}</button>`}</div></div>
-    </article>`;
-  const A=list.filter(inm),B=list.filter(p=>!inm(p));
-  const head=(t,d)=>`<div class="sec-h"><h2>${t}</h2><p>${d}</p></div>`;
-  $("#grid").innerHTML=!list.length?`<div class="empty">No encontramos ese juguete. Prueba con otra palabra o escríbenos.</div>`
-    :(A.length&&B.length)?head("Entrega inmediata","Ya están en Nicaragua, listos para entregar.")+A.map(card).join("")+head("Primera colección Montessori","Apártalos con el 50%; llegan en diciembre.")+B.map(card).join("")
-    :list.map(card).join("");
+const q=busq.trim().toLowerCase();
+const list=PRODUCTOS.filter(p=>p.disponible!==false&&enEtapa(p,filtro)&&(!q||(p.nombre+" "+p.frase+" "+p.descripcion).toLowerCase().includes(q)));
+const card=p=>`
+<article class="card" tabindex="0" data-id="${p.id}" aria-label="${esc(p.nombre)}">
+<div class="ph">${media(p,fotosDe(p)[0])}
+<span class="badge">${esc(p.edad)}</span>${p.agotado?'<span class="badge ed">Agotado</span>':p.destacado?'<span class="badge ed">Edición limitada</span>':p.enStock?'<span class="badge ed">Entrega inmediata</span>':''}${p.variantes&&p.variantes.length>1&&!p.agotado?`<span class="badge" style="top:auto;bottom:10px">${p.variantes.length} colores</span>`:''}</div>
+<div class="body"><h3>${esc(p.nombre)}</h3><div class="fr">${esc(p.frase)}</div>
+<div class="row">${priceHTML(p)}${p.agotado?`<a class="add" style="text-decoration:none" target="_blank" rel="noopener" href="${contactURL('Hola Raíces y Alas, avísenme cuando vuelva: '+p.nombre)}">Avisarme</a>`:`<button class="add ${enCarrito(p.id)?'in':''}" type="button" data-add="${p.id}">${enCarrito(p.id)?'En tu lista ✓':p.variantes&&p.variantes.length?'Elegir color':(p.enStock?'Pedir':'Pre-reservar')}</button>`}</div></div>
+</article>`;
+const A=list.filter(inm),B=list.filter(p=>!inm(p));
+const head=(t,d)=>`<div class="sec-h"><h2>${t}</h2><p>${d}</p></div>`;
+$("#grid").innerHTML=!list.length?`<div class="empty">No encontramos ese juguete. Prueba con otra palabra o escríbenos.</div>`
+:(A.length&&B.length)?head("Entrega inmediata","Ya están en Nicaragua, listos para entregar.")+A.map(card).join("")+head("Primera colección Montessori","Apártalos con el 50%; llegan en diciembre.")+B.map(card).join("")
+:list.map(card).join("");
 }
 function count(){const n=Object.values(cart).reduce((a,b)=>a+b,0);$("#count").textContent=n}
-function add(id){cart[id]=(cart[id]||0)+1;save();count();renderGrid();toast(byId[id].nombre+(byId[id].enStock?" agregado a tu pedido":" agregado a tu pre-reserva"))}
+function add(id){if(!String(id).includes("::")&&byId[id]&&byId[id].variantes&&byId[id].variantes.length){openProd(id);return false}const q=P(id);if(!q||q.agotado)return false;cart[id]=(cart[id]||0)+1;save();count();renderGrid();toast(q.nombre+(q.enStock?" agregado a tu pedido":" agregado a tu pre-reserva"));return true}
 
 function openProd(id){
-  const p=byId[id];let i=0;
-  const draw=()=>{
-    $("#prod").innerHTML=`<button class="x" type="button" data-close aria-label="Cerrar">×</button>
-    <div class="gal">${p.fotos.length?`<img class="main" src="${foto(p.fotos[i])}" alt="${esc(p.nombre)}">`:`<div class="ph" style="border-radius:20px">${media(p)}</div>`}
-      ${p.fotos.length>1?`<div class="thumbs">${p.fotos.map((f,j)=>`<button type="button" data-th="${j}" aria-current="${j===i}" aria-label="Foto ${j+1}"><img src="${foto(f)}" alt=""></button>`).join("")}</div>`:""}</div>
-    <div class="det"><span class="age">${esc(p.edad)}</span><h2 id="pTitle">${esc(p.nombre)}</h2><div class="fr">${esc(p.frase)}</div>
-      <p style="margin:0">${esc(p.descripcion)}</p>
-      <ul class="bens">${(p.beneficios||[]).map(b=>`<li>${esc(b)}</li>`).join("")}</ul>
-      <div class="chips2">${[p.material,p.detalle].filter(Boolean).map(x=>`<span>${esc(x)}</span>`).join("")}</div>
-      ${priceHTML(p)}
-      <div class="note">${p.agotado?'Este juguete se agotó por ahora. Escríbenos y te avisamos cuando vuelva.':p.enStock?'Ya está en Nicaragua, listo para entregar.':'Primera colección, seleccionada para ti. Apártalo con el 50%; la fecha de entrega se confirma al llegar a Nicaragua.'}</div>
-      ${p.agotado?'':`<button class="big" type="button" data-add="${p.id}">${cart[p.id]?'Agregar otro':(p.enStock?'Agregar a mi pedido':'Agregar a mi pre-reserva')}</button>`}
-      <a class="big sec" style="text-align:center;text-decoration:none" target="_blank" rel="noopener" data-copy="${esc('Hola Raíces y Alas, quiero saber más de: '+p.nombre)}" href="${contactURL('Hola Raíces y Alas, quiero saber más de: '+p.nombre)}">Preguntar por ${CONFIG.whatsapp?'WhatsApp':'Instagram'}</a>
-    </div>`;
-  };
-  draw();$("#prod").onclick=e=>{const t=e.target.closest("[data-th]");if(t){i=+t.dataset.th;draw()}};
-  show("#prod");
+const p=byId[id];if(!p)return;let i=0;
+let v=(p.variantes&&p.variantes.length)?((p.variantes.find(x=>x.estado!=="agotado")||p.variantes[0]).nombre):null;
+const draw=()=>{
+const q=v?P(p.id+"::"+v):p;const F=fotosDe(p,v);const key=v?p.id+"::"+v:p.id;if(i>=F.length)i=0;
+$("#prod").innerHTML=`<button class="x" type="button" data-close aria-label="Cerrar">×</button>
+<div class="gal">${F.length?`<div class="mw"><img class="main" src="${foto(F[i])}" alt="${esc(p.nombre)}" style="${estImg(F[i])}"></div>`:`<div class="ph" style="border-radius:20px">${media(p)}</div>`}
+${F.length>1?`<div class="thumbs">${F.map((f,j)=>`<button type="button" data-th="${j}" aria-current="${j===i}" aria-label="Foto ${j+1}"><img src="${foto(f)}" alt=""></button>`).join("")}</div>`:""}</div>
+<div class="det"><span class="age">${esc(p.edad)}</span><h2 id="pTitle">${esc(p.nombre)}</h2><div class="fr">${esc(p.frase)}</div>
+${p.variantes&&p.variantes.length?`<div class="vars"><span class="ncol">Color: <b>${esc(v)}</b></span><div class="vchips">${p.variantes.map(x=>`<button type="button" class="vchip ${x.estado==="agotado"?"off":""}" data-var="${esc(x.nombre)}" aria-pressed="${x.nombre===v}">${esc(x.nombre)}</button>`).join("")}</div></div>`:""}
+<p style="margin:0">${esc(p.descripcion)}</p>
+<ul class="bens">${(p.beneficios||[]).map(b=>`<li>${esc(b)}</li>`).join("")}</ul>
+<div class="chips2">${[p.material,p.detalle].filter(Boolean).map(x=>`<span>${esc(x)}</span>`).join("")}</div>
+${priceHTML(q)}
+<div class="note">${q.agotado?(v?'Este color se agotó por ahora. Elige otro o escríbenos y te avisamos cuando vuelva.':'Este juguete se agotó por ahora. Escríbenos y te avisamos cuando vuelva.'):q.enStock?'Ya está en Nicaragua, listo para entregar.':'Primera colección, seleccionada para ti. Apártalo con el 50%; la fecha de entrega se confirma al llegar a Nicaragua.'}</div>
+${q.agotado?'':`<button class="big" type="button" data-add="${esc(key)}">${cart[key]?'Agregar otro':(q.enStock?'Agregar a mi pedido':'Agregar a mi pre-reserva')}</button>`}
+<a class="big sec" style="text-align:center;text-decoration:none" target="_blank" rel="noopener" data-copy="${esc('Hola Raíces y Alas, quiero saber más de: '+q.nombre)}" href="${contactURL('Hola Raíces y Alas, quiero saber más de: '+q.nombre)}">Preguntar por ${CONFIG.whatsapp?'WhatsApp':'Instagram'}</a>
+</div>`;
+};
+draw();$("#prod").onclick=e=>{const t=e.target.closest("[data-th]");if(t){i=+t.dataset.th;draw();return}const c=e.target.closest("[data-var]");if(c){v=c.dataset.var;i=0;draw()}};
+show("#prod");
 }
 function message(){
-  const f=id=>($("#"+id)?.value||"").trim();
-  const ent=Object.entries(cart);const ya=ent.filter(([id])=>byId[id].enStock),pre=ent.filter(([id])=>!byId[id].enStock);
-  const sum=L=>{let t=0,ok=true;for(const [id,q] of L){const p=byId[id];if(p.precio==null)ok=false;else t+=p.precio*q}return {t,ok}};
-  const ln=L=>L.map(([id,q])=>{const p=byId[id];return `• ${q} × ${p.nombre}${p.precio!=null?' ('+usd(p.precio*q)+')':''}`}).join("\n");
-  const A=sum(ya),B=sum(pre);
-  let t="Hola Raíces y Alas 🌿";
-  if(ya.length){t+=`\n\nQuiero pedir (entrega inmediata):\n${ln(ya)}`;if(A.ok&&A.t>0)t+=`\nTotal: ${usd(A.t)} (${cor(A.t)})`}
-  if(pre.length){t+=`\n\nQuiero pre-reservar de la primera colección:\n${ln(pre)}`;if(B.ok&&B.t>0)t+=`\nTotal: ${usd(B.t)} (${cor(B.t)})\nPre-reserva 50%: ${usd(B.t*CONFIG.anticipo)} (${cor(B.t*CONFIG.anticipo)})`}
-  t+=`\n\nSoy: ${tipo}`;
-  if(f("cNom")) t+=`\nNombre: ${f("cNom")}`;
-  if(f("cCiu")) t+=`\nCiudad: ${f("cCiu")}`;
-  if(f("cNota")) t+=`\nNota: ${f("cNota")}`;
-  t+=ya.length&&!pre.length?`\n\n¿Me confirman cómo hacer el pago y la entrega?`:`\n\n¿Me confirman cómo hacer el pago?`;
-  return {t,A,B,ya,pre};
+const f=id=>($("#"+id)?.value||"").trim();
+const ent=Object.entries(cart).filter(([id])=>P(id));const ya=ent.filter(([id])=>P(id).enStock),pre=ent.filter(([id])=>!P(id).enStock);
+const sum=L=>{let t=0,ok=true;for(const [id,q] of L){const p=P(id);if(p.precio==null)ok=false;else t+=p.precio*q}return {t,ok}};
+const ln=L=>L.map(([id,q])=>{const p=P(id);return `• ${q} × ${p.nombre}${p.precio!=null?' ('+usd(p.precio*q)+')':''}`}).join("\n");
+const A=sum(ya),B=sum(pre);
+let t="Hola Raíces y Alas 🌿";
+if(ya.length){t+=`\n\nQuiero pedir (entrega inmediata):\n${ln(ya)}`;if(A.ok&&A.t>0)t+=`\nTotal: ${usd(A.t)} (${cor(A.t)})`}
+if(pre.length){t+=`\n\nQuiero pre-reservar de la primera colección:\n${ln(pre)}`;if(B.ok&&B.t>0)t+=`\nTotal: ${usd(B.t)} (${cor(B.t)})\nPre-reserva 50%: ${usd(B.t*CONFIG.anticipo)} (${cor(B.t*CONFIG.anticipo)})`}
+t+=`\n\nSoy: ${tipo}`;
+if(f("cNom")) t+=`\nNombre: ${f("cNom")}`;
+if(f("cCiu")) t+=`\nCiudad: ${f("cCiu")}`;
+if(f("cNota")) t+=`\nNota: ${f("cNota")}`;
+t+=ya.length&&!pre.length?`\n\n¿Me confirman cómo hacer el pago y la entrega?`:`\n\n¿Me confirman cómo hacer el pago?`;
+return {t,A,B,ya,pre};
 }
 function renderCart(){
-  const ids=Object.keys(cart);
-  const {t,A,B,ya,pre}=message();
-  const totHTML=(ya.length?(A.ok&&A.t>0?`<div><span>Entrega inmediata</span><span>${usd(A.t)} · ${cor(A.t)}</span></div>`:''):'')+(pre.length?(B.ok&&B.t>0?`<div><span>Pre-reserva (total)</span><span>${usd(B.t)} · ${cor(B.t)}</span></div><div class="hl"><span>Para apartar (50%)</span><span>${usd(B.t*CONFIG.anticipo)} · ${cor(B.t*CONFIG.anticipo)}</span></div>`:`<div><span>Te enviamos el total y el 50% para apartar por mensaje.</span></div>`):'');
-  $("#cart").innerHTML=`<button class="x" type="button" data-close aria-label="Cerrar">×</button>
-   <div><div class="kicker">Raíces y Alas</div><h2 id="cTitle" style="font-size:30px;margin-top:6px">Mi pedido</h2></div>
-   ${ids.length?`<div>${ids.map(id=>{const p=byId[id];return `<div class="line">${p.fotos.length?`<img src="${foto(p.fotos[0])}" alt="">`:`<span style="width:56px;height:56px;border-radius:12px;background:var(--durazno,#F6D9BF);display:grid;place-items:center;font-size:26px">${p.emoji||"🌿"}</span>`}<div><b>${esc(p.nombre)}</b><small>${p.precio!=null?usd(p.precio):'Precio al pre-reservar'}${p.enStock?' · Entrega inmediata':''}</small></div>
-     <div class="qty"><button type="button" data-dec="${id}" aria-label="Quitar uno">−</button><span>${cart[id]}</span><button type="button" data-inc="${id}" aria-label="Agregar uno">+</button></div></div>`}).join("")}</div>
-   <div class="tot">${totHTML}</div>
-   <div class="seg" role="group" aria-label="Tipo de cliente">${[["Familia","Para mi familia"],["Mayoreo","Al por mayor"],["Socio institucional","Colegio, guardería o clínica"]].map(([x,l])=>`<button type="button" data-tipo="${x}" aria-pressed="${tipo===x}">${l}</button>`).join("")}</div>
-   <label class="f" for="cNom">Tu nombre<input id="cNom" autocomplete="name" placeholder="Ej. Ana López"></label>
-   <label class="f" for="cCiu">Ciudad<input id="cCiu" placeholder="Ej. Managua"></label>
-   <label class="f" for="cNota">Nota (opcional)<textarea id="cNota" rows="2" placeholder="Ej. es para regalo de Navidad"></textarea></label>
-   <div><div class="kicker" style="margin-bottom:6px">Mensaje que vas a enviar</div><div class="msg" id="msg">${esc(t)}</div></div>
-   <a class="big" id="send" style="text-align:center;text-decoration:none" target="_blank" rel="noopener" href="${contactURL(t)}">${!CONFIG.whatsapp?'Copiar mensaje y abrir Instagram':pegar()?'Copiar mensaje y abrir WhatsApp':'Enviar por WhatsApp'}</a>
-   ${!pegar()?'':'<small style="color:var(--muted);text-align:center">'+(CONFIG.whatsapp?'WhatsApp':'Instagram')+' no deja escribir el mensaje por ti: al tocar el botón lo copiamos solito. En el chat, mantén presionado y toca <b>Pegar</b>, luego envíalo.</small><button class="big sec" type="button" id="copy">Solo copiar el mensaje</button>'}`
-   :`<p style="color:var(--muted)">Todavía no has elegido juguetes. Toca “Pre-reservar” en los que te gusten y aquí armamos tu mensaje.</p><button class="big sec" type="button" data-close>Ver la colección</button>`}`;
+const ids=Object.keys(cart).filter(k=>P(k));
+const {t,A,B,ya,pre}=message();
+const totHTML=(ya.length?(A.ok&&A.t>0?`<div><span>Entrega inmediata</span><span>${usd(A.t)} · ${cor(A.t)}</span></div>`:''):'')+(pre.length?(B.ok&&B.t>0?`<div><span>Pre-reserva (total)</span><span>${usd(B.t)} · ${cor(B.t)}</span></div><div class="hl"><span>Para apartar (50%)</span><span>${usd(B.t*CONFIG.anticipo)} · ${cor(B.t*CONFIG.anticipo)}</span></div>`:`<div><span>Te enviamos el total y el 50% para apartar por mensaje.</span></div>`):'');
+$("#cart").innerHTML=`<button class="x" type="button" data-close aria-label="Cerrar">×</button>
+<div><div class="kicker">Raíces y Alas</div><h2 id="cTitle" style="font-size:30px;margin-top:6px">Mi pedido</h2></div>
+${ids.length?`<div>${ids.map(id=>{const p=P(id);const f0=fotosDe(p)[0];return `<div class="line">${f0?`<img src="${foto(f0)}" alt="">`:`<span style="width:56px;height:56px;border-radius:12px;background:var(--durazno,#F6D9BF);display:grid;place-items:center;font-size:26px">${p.emoji||"🌿"}</span>`}<div><b>${esc(p.nombre)}</b><small>${p.precio!=null?usd(p.precio):'Precio al pre-reservar'}${p.enStock?' · Entrega inmediata':''}</small></div>
+<div class="qty"><button type="button" data-dec="${id}" aria-label="Quitar uno">−</button><span>${cart[id]}</span><button type="button" data-inc="${id}" aria-label="Agregar uno">+</button></div></div>`}).join("")}</div>
+<div class="tot">${totHTML}</div>
+<div class="seg" role="group" aria-label="Tipo de cliente">${[["Familia","Para mi familia"],["Mayoreo","Al por mayor"],["Socio institucional","Colegio, guardería o clínica"]].map(([x,l])=>`<button type="button" data-tipo="${x}" aria-pressed="${tipo===x}">${l}</button>`).join("")}</div>
+<label class="f" for="cNom">Tu nombre<input id="cNom" autocomplete="name" placeholder="Ej. Ana López"></label>
+<label class="f" for="cCiu">Ciudad<input id="cCiu" placeholder="Ej. Managua"></label>
+<label class="f" for="cNota">Nota (opcional)<textarea id="cNota" rows="2" placeholder="Ej. es para regalo de Navidad"></textarea></label>
+<div><div class="kicker" style="margin-bottom:6px">Mensaje que vas a enviar</div><div class="msg" id="msg">${esc(t)}</div></div>
+<a class="big" id="send" style="text-align:center;text-decoration:none" target="_blank" rel="noopener" href="${contactURL(t)}">${!CONFIG.whatsapp?'Copiar mensaje y abrir Instagram':pegar()?'Copiar mensaje y abrir WhatsApp':'Enviar por WhatsApp'}</a>
+${!pegar()?'':'<small style="color:var(--muted);text-align:center">'+(CONFIG.whatsapp?'WhatsApp':'Instagram')+' no deja escribir el mensaje por ti: al tocar el botón lo copiamos solito. En el chat, mantén presionado y toca <b>Pegar</b>, luego envíalo.</small><button class="big sec" type="button" id="copy">Solo copiar el mensaje</button>'}`
+:`<p style="color:var(--muted)">Todavía no has elegido juguetes. Toca “Pre-reservar” en los que te gusten y aquí armamos tu mensaje.</p><button class="big sec" type="button" data-close>Ver la colección</button>`}`;
 }
 function refreshMsg(){const {t}=message();const m=$("#msg");if(m){m.textContent=t;$("#send").href=contactURL(t)}}
 let last=null;
@@ -343,50 +359,72 @@ function hideAll(){$("#scrim").hidden=true;$("#prod").hidden=true;$("#cart").hid
 
 function copiar(t){let ok=false;try{const a=document.createElement("textarea");a.value=t;a.setAttribute("readonly","");a.style.cssText="position:fixed;top:0;left:0;opacity:0";document.body.appendChild(a);a.focus();a.select();a.setSelectionRange(0,t.length);ok=document.execCommand("copy");a.remove()}catch(e){}try{navigator.clipboard&&navigator.clipboard.writeText(t).catch(()=>{})}catch(e){}return ok}
 document.addEventListener("click",e=>{
-  const snd=e.target.closest("#send");if(snd&&pegar()){copiar(message().t);toast("Mensaje copiado ✓ Pégalo en el chat de "+canal());return}
-  const dc=e.target.closest("[data-copy]");if(dc&&pegar()){copiar(dc.dataset.copy);toast("Mensaje copiado ✓ Pégalo en el chat de "+canal());return}
-  const a=e.target.closest("[data-add]");if(a){e.stopPropagation();add(a.dataset.add);if(!$("#prod").hidden){hideAll();renderCart();show("#cart")}return}
-  const c=e.target.closest(".chip[data-k]");if(c){filtro=c.dataset.k;renderChips();renderGrid();return}
-  const card=e.target.closest(".card");if(card){openProd(card.dataset.id);return}
-  if(e.target.closest("[data-close]")||e.target.id==="scrim"){hideAll();return}
-  const inc=e.target.closest("[data-inc]");if(inc){cart[inc.dataset.inc]++;save();count();renderCart();renderGrid();return}
-  const dec=e.target.closest("[data-dec]");if(dec){const id=dec.dataset.dec;cart[id]--;if(cart[id]<=0)delete cart[id];save();count();renderCart();renderGrid();return}
-  const tp=e.target.closest("[data-tipo]");if(tp){tipo=tp.dataset.tipo;const v=["cNom","cCiu","cNota"].map(i=>$("#"+i)?.value);renderCart();["cNom","cCiu","cNota"].forEach((i,j)=>{if($("#"+i))$("#"+i).value=v[j]||""});refreshMsg();return}
-  if(e.target.id==="copy"){const {t}=message();copiar(t);toast("Mensaje copiado ✓");return}
+const snd=e.target.closest("#send");if(snd&&pegar()){copiar(message().t);toast("Mensaje copiado ✓ Pégalo en el chat de "+canal());return}
+const dc=e.target.closest("[data-copy]");if(dc&&pegar()){copiar(dc.dataset.copy);toast("Mensaje copiado ✓ Pégalo en el chat de "+canal());return}
+const a=e.target.closest("[data-add]");if(a){e.stopPropagation();const desdeFicha=!$("#prod").hidden;const ok=add(a.dataset.add);if(ok&&desdeFicha){hideAll();renderCart();show("#cart")}return}
+const c=e.target.closest(".chip[data-k]");if(c){filtro=c.dataset.k;renderChips();renderGrid();return}
+const card=e.target.closest(".card");if(card){openProd(card.dataset.id);return}
+if(e.target.closest("[data-close]")||e.target.id==="scrim"){hideAll();return}
+const inc=e.target.closest("[data-inc]");if(inc){cart[inc.dataset.inc]++;save();count();renderCart();renderGrid();return}
+const dec=e.target.closest("[data-dec]");if(dec){const id=dec.dataset.dec;cart[id]--;if(cart[id]<=0)delete cart[id];save();count();renderCart();renderGrid();return}
+const tp=e.target.closest("[data-tipo]");if(tp){tipo=tp.dataset.tipo;const v=["cNom","cCiu","cNota"].map(i=>$("#"+i)?.value);renderCart();["cNom","cCiu","cNota"].forEach((i,j)=>{if($("#"+i))$("#"+i).value=v[j]||""});refreshMsg();return}
+if(e.target.id==="copy"){const {t}=message();copiar(t);toast("Mensaje copiado ✓");return}
 });
 document.addEventListener("keydown",e=>{if(e.key==="Escape")hideAll();if(e.key==="Enter"&&e.target.classList?.contains("card"))openProd(e.target.dataset.id)});
 document.addEventListener("input",e=>{if(e.target.id==="q"){busq=e.target.value;renderGrid()}else if(["cNom","cCiu","cNota"].includes(e.target.id))refreshMsg()});
 $("#openCart").onclick=()=>{renderCart();show("#cart")};
 /* Google Sheets: pestaña "Catalogo web" publicada como CSV (columnas: id, precio_usd, existencias, visible, destacado).
-   Celda vacía = se usa lo de productos.json. existencias vacía = pre-reserva; 0 = Agotado; >0 = Entrega inmediata (nunca se muestra el número). */
+Celda vacía = se usa lo de productos.json. existencias vacía = pre-reserva; 0 = Agotado; >0 = Entrega inmediata (nunca se muestra el número). */
 function parseCSV(t){const R=[];let r=[],c="",q=false;for(let i=0;i<t.length;i++){const ch=t[i];if(q){if(ch=='"'){if(t[i+1]=='"'){c+='"';i++}else q=false}else c+=ch}else if(ch=='"')q=true;else if(ch==","){r.push(c);c=""}else if(ch=="\n"||ch=="\r"){if(ch=="\r"&&t[i+1]=="\n")i++;r.push(c);R.push(r);r=[];c=""}else c+=ch}if(c||r.length){r.push(c);R.push(r)}return R}
 const num=v=>{v=String(v??"").replace(/[^\d.,-]/g,"");if(!v)return null;if(v.includes(",")&&!v.includes("."))v=v.replace(",",".");else v=v.replace(/,/g,"");const n=parseFloat(v);return isNaN(n)?null:n};
 const siNo=v=>{v=String(v??"").trim().toLowerCase();return v===""?null:["si","sí","yes","true","1","x"].includes(v)};
 async function aplicarHoja(){
-  if(!CONFIG.hojaCSV)return;
-  try{
-    const r=await fetch(CONFIG.hojaCSV+(CONFIG.hojaCSV.includes("?")?"&":"?")+"t="+Date.now());if(!r.ok)return;
-    const rows=parseCSV(await r.text());const h=(rows.shift()||[]).map(x=>x.trim().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z]+/g,"_").replace(/^_|_$/g,""));
-    const col=k=>h.findIndex(x=>x.startsWith(k));const ci=col("id"),cp=col("precio"),ce=col("existencia"),cv=col("visible"),cd=col("destacado");
-    if(ci<0)return;const m=Object.fromEntries(PRODUCTOS.map(p=>[p.id,p]));
-    for(const row of rows){const p=m[(row[ci]||"").trim()];if(!p)continue;
-      if(cp>=0&&num(row[cp])!=null)p.precio=num(row[cp]);
-      if(cv>=0&&siNo(row[cv])!=null)p.disponible=siNo(row[cv]);
-      if(cd>=0&&siNo(row[cd])!=null)p.destacado=siNo(row[cd]);
-      const e=ce>=0?num(row[ce]):null;if(e!=null){p.agotado=e<=0;p.enStock=e>0||inm(p)}}
-  }catch(e){}
+if(!CONFIG.hojaCSV)return;
+try{
+const r=await fetch(CONFIG.hojaCSV+(CONFIG.hojaCSV.includes("?")?"&":"?")+"t="+Date.now());if(!r.ok)return;
+const rows=parseCSV(await r.text());const h=(rows.shift()||[]).map(x=>x.trim().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z]+/g,"_").replace(/^_|_$/g,""));
+const col=k=>h.findIndex(x=>x.startsWith(k));const ci=col("id"),cp=col("precio"),ce=col("existencia"),cv=col("visible"),cd=col("destacado");
+if(ci<0)return;const m=Object.fromEntries(PRODUCTOS.map(p=>[p.id,p]));
+for(const row of rows){const p=m[(row[ci]||"").trim()];if(!p)continue;
+if(cp>=0&&num(row[cp])!=null)p.precio=num(row[cp]);
+if(cv>=0&&siNo(row[cv])!=null)p.disponible=siNo(row[cv]);
+if(cd>=0&&siNo(row[cd])!=null)p.destacado=siNo(row[cd]);
+const e=ce>=0?num(row[ce]):null;if(e!=null){p.agotado=e<=0;p.enStock=e>0||inm(p)}}
+}catch(e){}
+}
+async function aplicarSistema(){
+if(!SISTEMA.url)return;
+try{
+const r=await fetch(SISTEMA.url+"/rest/v1/rpc/catalogo_publico",{method:"POST",headers:{apikey:SISTEMA.clave,Authorization:"Bearer "+SISTEMA.clave,"Content-Type":"application/json"},body:"{}",cache:"no-store"});
+if(!r.ok)return;const d=await r.json();
+const m=Object.fromEntries(PRODUCTOS.map(p=>[p.id,p]));
+for(const [id,x] of Object.entries(d||{})){
+let p=m[id];
+if(!p){if(!x.nombre||x.visible===false||x.activo===false)continue;p={id,nombre:x.nombre,frase:"",descripcion:"",edad:"",edadMin:0,edadMax:99,beneficios:[],etiquetas:[],precio:null,disponible:true,fotos:[],emoji:"🌿"};PRODUCTOS.push(p);m[id]=p}
+for(const k of ["nombre","frase","descripcion","edad"]) if(x[k]) p[k]=x[k];
+if(x.visible===false||x.activo===false)p.disponible=false;
+if(x.destacado!=null)p.destacado=x.destacado;
+if(x.precio!=null)p.precio=+x.precio;
+if(x.estado){p.agotado=x.estado==="agotado";p.enStock=x.estado==="disponible";if(p.enStock)p.seccion="inmediata";else if(p.seccion==="inmediata")p.seccion=""}
+if(x.fotos&&x.fotos.length)p.fotos=x.fotos;
+if(x.max_fotos)p.maxFotos=x.max_fotos;
+if(x.variantes&&x.variantes.length)p.variantes=x.variantes.filter(v=>v.nombre);
+}
+}catch(e){}
 }
 async function init(){
-  try{const c=await fetch("config.json",{cache:"no-store"});if(c.ok)Object.assign(CONFIG,await c.json())}catch(e){}
-  if(!PRODUCTOS.length){try{const r=await fetch("productos.json",{cache:"no-store"});PRODUCTOS=await r.json()}catch(e){$("#grid").innerHTML='<div class="empty">No pudimos cargar el catálogo. Recarga la página.</div>'}}
-  for(const p of PRODUCTOS) if(inm(p)) p.enStock=true;
-  await aplicarHoja();
-  byId=Object.fromEntries(PRODUCTOS.map(p=>[p.id,p]));
-  for(const id of Object.keys(cart)) if(!byId[id]||byId[id].agotado||byId[id].disponible===false) delete cart[id];
-  save();
-  $("#lnkMay").href=contactURL("Hola Raíces y Alas, MAYOREO: quiero conocer sus precios al por mayor.");
-  $("#lnkSoc").href=contactURL("Hola Raíces y Alas, SOCIOS: represento un colegio/guardería/clínica y quiero información.");
-  renderChips();renderGrid();count();
+try{const c=await fetch("config.json",{cache:"no-store"});if(c.ok)Object.assign(CONFIG,await c.json())}catch(e){}
+if(!PRODUCTOS.length){try{const r=await fetch("productos.json",{cache:"no-store"});PRODUCTOS=await r.json()}catch(e){$("#grid").innerHTML='<div class="empty">No pudimos cargar el catálogo. Recarga la página.</div>'}}
+for(const p of PRODUCTOS) if(inm(p)) p.enStock=true;
+await aplicarHoja();
+await aplicarSistema();
+byId=Object.fromEntries(PRODUCTOS.map(p=>[p.id,p]));
+for(const id of Object.keys(cart)){const q=P(id);if(!q||q.agotado||q.disponible===false) delete cart[id]}
+save();
+$("#lnkMay").href=contactURL("Hola Raíces y Alas, MAYOREO: quiero conocer sus precios al por mayor.");
+$("#lnkSoc").href=contactURL("Hola Raíces y Alas, SOCIOS: represento un colegio/guardería/clínica y quiero información.");
+renderChips();renderGrid();count();
+const h=location.hash.match(/p=([a-z0-9-]+)/);if(h&&byId[h[1]])openProd(h[1]);
 }
 init();
 </script>
